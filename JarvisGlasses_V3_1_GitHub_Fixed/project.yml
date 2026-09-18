@@ -1,0 +1,34 @@
+name: JarvisGlasses
+
+options:
+  bundleIdPrefix: com.nexer
+  deploymentTarget:
+    iOS: "18.0"
+
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+    PRODUCT_BUNDLE_IDENTIFIER: com.nexer.jarvisglasses
+    MARKETING_VERSION: 3.1
+    CURRENT_PROJECT_VERSION: 4
+    IPHONEOS_DEPLOYMENT_TARGET: 18.0
+
+targets:
+  JarvisGlasses:
+    type: application
+    platform: iOS
+    sources:
+      - path: BLEController.swift
+      - path: ContentView.swift
+      - path: JarvisCoordinator.swift
+      - path: JarvisGlassesApp.swift
+      - path: WakeJarvisIntent.swift
+      - path: WakeWordManager.swift
+    settings:
+      base:
+        INFOPLIST_FILE: Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: NO
+    scheme:
+      gatherCoverageData: false

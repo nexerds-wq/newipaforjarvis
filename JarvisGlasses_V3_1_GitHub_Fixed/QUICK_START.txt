@@ -1,0 +1,16 @@
+JARVIS GLASSES V3 - QUICK START
+
+1. Upload the whole V3 folder to GitHub.
+2. Actions -> Build Jarvis Glasses V3 IPA -> Run workflow.
+3. Install the generated IPA with Sideloadly.
+4. Open Jarvis Glasses -> Scan -> select M02S -> Test Glasses.
+5. Turn on Wake-word listening.
+6. Leave Wake phrase as Hey Jarvis for the first test.
+7. Set Sensitivity to High.
+8. Say Hey Jarvis several times while watching Live speech.
+9. If iOS hears a wrong version, add that version to Recognition aliases.
+10. If it still misses, use Max sensitivity.
+11. Lock the phone and test again.
+
+You can change the wake phrase to anything directly inside the app.
+Do not swipe-force-close the app if you want background listening.
