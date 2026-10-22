@@ -1,0 +1,32 @@
+name: Build Solos iPhone ESP32 bridge firmware
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'main/**'
+      - 'CMakeLists.txt'
+      - 'sdkconfig.defaults'
+      - '.github/workflows/build-esp32.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: espressif/install-esp-idf-action@v1
+        with:
+          version: v5.3.3
+      - name: Build original ESP32 firmware
+        run: |
+          idf.py set-target esp32
+          idf.py build
+      - name: Upload ESP32 firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Solos-iPhone-ESP32-firmware
+          path: |
+            build/bootloader/bootloader.bin
+            build/partition_table/partition-table.bin
+            build/solos_iphone_relay.bin
+            build/flasher_args.json
