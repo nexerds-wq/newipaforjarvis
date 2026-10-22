@@ -1,0 +1,51 @@
+name: Build Solos HUD iOS Display Bridge
+
+on:
+  push:
+    branches:
+      - solos-ios-display-bridge
+    paths:
+      - "solos-ios-patch/**"
+      - ".github/workflows/solos-ios-display-bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout builder branch
+        uses: actions/checkout@v4
+      - name: Checkout original Solos HUD source
+        run: git clone --depth 1 https://github.com/StudentBroken/solos-hud.git upstream
+      - name: Apply iOS bridge patch
+        run: python3 solos-ios-patch/apply_ios_patch.py upstream
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Flutter dependencies
+        working-directory: upstream/solos_hud
+        run: flutter pub get
+      - name: Check Swift syntax
+        run: swiftc -frontend -parse upstream/solos_hud/ios/Runner/AppDelegate.swift
+      - name: Build iPhone app (unsigned)
+        working-directory: upstream/solos_hud
+        run: flutter build ios --release --no-codesign
+      - name: Package unsigned IPA
+        working-directory: upstream/solos_hud
+        run: |
+          mkdir -p ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app ipa/Payload/Runner.app
+          cd ipa
+          zip -qry ../../SolosHUD-iOS-Display-Bridge-unsigned.ipa Payload
+      - name: Upload IPA for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: SolosHUD-iOS-Display-Bridge-unsigned
+          path: upstream/SolosHUD-iOS-Display-Bridge-unsigned.ipa
+          if-no-files-found: error
